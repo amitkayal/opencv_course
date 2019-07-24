@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\prem\study\technical\opencv_course\sample_code\Sample-Code-Cpp\build\CMakeFiles\9340637038f294184fc6f55260162f1c\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{2609CFE5-2003-30EF-B5EB-BB31820468DD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

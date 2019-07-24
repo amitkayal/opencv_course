@@ -1,0 +1,23 @@
+Windows:
+========
+
+Python:
+-------
+conda activate OpenCV-4.1.0-py3
+python file_name.py3
+
+
+C++:
+----
+Open the CMakeLists.txt
+
+Make the following change:
+SET(OpenCV_DIR D:\\prem\\study\\technical\\opencv_course\\dev\\opencv-4.1.0\\Installation\\x64\\vc15\\staticlib)
+
+set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+
+cd build
+cmake ..
+cmake --build . --config Release
+cd ..
+.\build\Release\sampleCode

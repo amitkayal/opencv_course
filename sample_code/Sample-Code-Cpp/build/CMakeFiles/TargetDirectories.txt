@@ -1,0 +1,3 @@
+D:/prem/study/technical/opencv_course/sample_code/Sample-Code-Cpp/build/CMakeFiles/sampleCode.dir
+D:/prem/study/technical/opencv_course/sample_code/Sample-Code-Cpp/build/CMakeFiles/ALL_BUILD.dir
+D:/prem/study/technical/opencv_course/sample_code/Sample-Code-Cpp/build/CMakeFiles/ZERO_CHECK.dir

@@ -7,8 +7,7 @@ SET(CMAKE_CXX_STANDARD 11)
 
 ######################## EDIT IF REQUIRED ####################
 # ###Uncomment the line below and specify the path to OpenCV directory i.e. the path to the OpenCVConfig.cmake file. Check the examples given below.
-#SET(OpenCV_DIR Enter-the-path-of-OpenCV-installation-on-your-system)
-
+SET(OpenCV_DIR D:\\prem\\study\\technical\\opencv_course\\dev\\opencv-4.1.0\\Installation\\x64\\vc15\\staticlib)
 
 ################### OpenCV_DIR Examples  #####################
 

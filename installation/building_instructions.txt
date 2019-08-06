@@ -17,7 +17,7 @@ SET(OpenCV_DIR D:\\prem\\study\\technical\\opencv_course\\dev\\opencv-4.1.0\\Ins
 set(CMAKE_CXX_FLAGS_RELEASE "/MT")
 
 cd build
-cmake ..
+cmake -G "Visual Studio 15 2017 Win64" ..   (cmake ..)
 cmake --build . --config Release
 cd ..
 .\build\Release\sampleCode

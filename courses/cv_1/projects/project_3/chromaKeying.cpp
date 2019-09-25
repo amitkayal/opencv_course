@@ -13,6 +13,10 @@
 using namespace std;
 using namespace cv;
 
+cv::Point startPoint, endPoint;
+bool isPatch;
+
+
 bool cmdOptionExists(char** begin, char** end, const std::string& option)
 {
   return std::find(begin, end, option) != end;
@@ -29,18 +33,21 @@ char* getCmdOption(char** begin, char** end, const std::string& option)
 }
 
 // function which will be called on mouse input
-void onMouse( int event, int x, int y, int flags, void* userdata)
+void onMouse(int event, int x, int y, int flags, void* userdata)
 {
-  // get left click from the mouse
-  if( event == EVENT_LBUTTONDOWN )
+  if (!isPatch)
   {
-
-  }
-
-  // added functionality for UNDO-ing the last modification
-  if( event == EVENT_RBUTTONDOWN )
-  {
-
+    // Event to be taken when left mouse button is pressed
+    if (event == cv::EVENT_LBUTTONDOWN)
+    {  
+      startPoint = Point(x, y);        
+    }
+    // Event to be taken when left mouse button is released
+    else if (event == cv::EVENT_LBUTTONUP)
+    {    
+      endPoint = Point(x, y);    
+      isPatch = true;            
+    } 
   }
 }
 
@@ -98,29 +105,43 @@ int main(int argc, char** argv)
     cv::namedWindow("Chroma Keying", WINDOW_NORMAL);     
 
     cv::setMouseCallback("Chroma Keying", onMouse, NULL);
+    
+    isPatch = false;
+    cv::Mat videoFrame;
     while(1)
-    {
-      cv::Mat videoFrame;
+    { 
+      
       // Capture frame-by-frame
       videoCap >> videoFrame;
       
       // If the frame is empty, break immediately
       if (videoFrame.empty())
-      break;
+        break;
     
-      // Display the resulting frame
-      cv::imshow("Chroma Keying", videoFrame);
-    
-      
-      // Press ESC on keyboard to exit
-      char c = (char)waitKey(25);
-      if (c == 27)  //Escape key board event
+      if (isPatch)
         break;      
+      
+      // Display the resulting frame
+      cv::imshow("Chroma Keying", videoFrame);   
+      
+      // Wait for sometime.
+      char c = (char)waitKey(25);
     }
     
     // When everything done, release the video capture object
     videoCap.release();
-
+    if (isPatch)
+    {
+      while (1)
+      {
+        cv::rectangle(videoFrame, startPoint, endPoint, cv::Scalar(0,0,255), 5);
+        cv::imshow("Chroma Keying", videoFrame);  
+        // Press ESC on keyboard to exit
+        char c = (char)waitKey(25);
+        if (c == 27)  //Escape key board event
+          break; 
+      }
+    }
     // Closes all the frames
     destroyAllWindows();
   

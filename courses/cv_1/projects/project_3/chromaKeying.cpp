@@ -15,7 +15,13 @@ using namespace cv;
 
 cv::Point startPoint, endPoint;
 bool isPatch;
+int toleranceFactor = 128;
+int toleranceMax = 255;
 
+Mat toleranceImage;
+cv::Point blueColorTolerance;
+cv::Point greenColorTolerance;
+cv::Point redColorTolerance;
 
 bool cmdOptionExists(char** begin, char** end, const std::string& option)
 {
@@ -49,6 +55,12 @@ void onMouse(int event, int x, int y, int flags, void* userdata)
       isPatch = true;            
     } 
   }
+}
+
+void toleranceUpdate(int, void*)
+{
+  std::cout << "Tolerance Value = " << toleranceFactor << std::endl;
+  cv::imshow("Chroma Keying", toleranceImage);
 }
 
 int main(int argc, char** argv)
@@ -132,10 +144,43 @@ int main(int argc, char** argv)
     videoCap.release();
     if (isPatch)
     {
+      cv::createTrackbar("Tolerance", "Chroma Keying", &toleranceFactor, toleranceMax, toleranceUpdate);
+      
+      //Create a Patch
+      cv::Rect box;
+      box.width = std::abs(endPoint.x - startPoint.x);
+      box.height = std::abs(endPoint.y - startPoint.y);
+      box.x = std::min(startPoint.x, endPoint.x);
+      box.y = std::min(startPoint.y, endPoint.y);
+      Mat colorPatch(videoFrame, box); 
+      
+      //Find maximum and minimum colors for each channel
+      cv::Mat colorChannels[3];
+      cv::split(colorPatch, colorChannels);
+      double min, max;
+      cv::minMaxIdx(colorChannels[0], &min, &max);
+      std::cout << "Blue Channel Min = " << min << " , Max = " << max
+          << std::endl;
+      blueColorTolerance = 
+          cv::Point(static_cast<int>(min),static_cast<int>(max));
+      cv::minMaxIdx(colorChannels[1], &min, &max);
+      std::cout << "Green Channel Min = " << min << " , Max = " << max
+          << std::endl;
+      greenColorTolerance = 
+          cv::Point(static_cast<int>(min),static_cast<int>(max));
+      cv::minMaxIdx(colorChannels[2], &min, &max);
+      std::cout << "Red Channel Min = " << min << " , Max = " << max
+          << std::endl;
+
+      redColorTolerance = 
+          cv::Point(static_cast<int>(min),static_cast<int>(max));
+      toleranceImage = videoFrame.clone();     
+            
       while (1)
       {
-        cv::rectangle(videoFrame, startPoint, endPoint, cv::Scalar(0,0,255), 5);
-        cv::imshow("Chroma Keying", videoFrame);  
+        cv::rectangle(toleranceImage, startPoint, endPoint,
+          cv::Scalar(0,0,255), 5);
+        cv::imshow("Chroma Keying", toleranceImage);  
         // Press ESC on keyboard to exit
         char c = (char)waitKey(25);
         if (c == 27)  //Escape key board event

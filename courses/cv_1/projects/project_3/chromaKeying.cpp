@@ -60,6 +60,16 @@ void onMouse(int event, int x, int y, int flags, void* userdata)
 void toleranceUpdate(int, void*)
 {
   std::cout << "Tolerance Value = " << toleranceFactor << std::endl;
+  for (int y = 0; y < toleranceImage.cols; y++)
+  {
+    for (int x = 0; x < toleranceImage.rows; x++)
+    {
+      cv::Vec3b pixel = toleranceImage.at<Vec3b>(x, y);
+      cv::Vec3b newPixel;      
+      newPixel.val[1] = pixel.val[1] + (toleranceFactor - 128);      
+      toleranceImage.at<Vec3b>(x, y) = newPixel;
+    }
+  }  
   cv::imshow("Chroma Keying", toleranceImage);
 }
 
@@ -171,20 +181,38 @@ int main(int argc, char** argv)
       cv::minMaxIdx(colorChannels[2], &min, &max);
       std::cout << "Red Channel Min = " << min << " , Max = " << max
           << std::endl;
-
       redColorTolerance = 
           cv::Point(static_cast<int>(min),static_cast<int>(max));
+          
       toleranceImage = videoFrame.clone();     
             
       while (1)
       {
         cv::rectangle(toleranceImage, startPoint, endPoint,
-          cv::Scalar(0,0,255), 5);
+          cv::Scalar(0, 0, 255), 5);
         cv::imshow("Chroma Keying", toleranceImage);  
         // Press ESC on keyboard to exit
         char c = (char)waitKey(25);
         if (c == 27)  //Escape key board event
           break; 
+          
+        if ((c == 114) || (c == 82)) //R or r key board event
+          break; 
+      }
+      std::cout << "Get the mask and dispaly it. " << std::endl;
+      cv::Scalar lower_threshold(0, 100, 0);  //RGB
+      cv::Scalar upper_threshold(redColorTolerance.y, 
+        greenColorTolerance.y, blueColorTolerance.y);
+      cv::Mat maskedFrame;
+      cv::inRange(toleranceImage, lower_threshold, upper_threshold,
+        maskedFrame);
+      while (1)
+      {        
+        cv::imshow("Chroma Keying", maskedFrame);  
+        // Press ESC on keyboard to exit
+        char c = (char)waitKey(25);
+        if (c == 27)  //Escape key board event
+          break;         
       }
     }
     // Closes all the frames

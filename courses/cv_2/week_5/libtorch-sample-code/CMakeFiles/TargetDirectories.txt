@@ -1,0 +1,3 @@
+/Users/visionifai/codes/bigvision/opencv-courses/bigvisionai/libtorch-sample-code/CMakeFiles/rebuild_cache.dir
+/Users/visionifai/codes/bigvision/opencv-courses/bigvisionai/libtorch-sample-code/CMakeFiles/edit_cache.dir
+/Users/visionifai/codes/bigvision/opencv-courses/bigvisionai/libtorch-sample-code/CMakeFiles/sample.dir
